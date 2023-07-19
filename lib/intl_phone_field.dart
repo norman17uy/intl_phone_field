@@ -25,6 +25,12 @@ class IntlPhoneField extends StatefulWidget {
   final bool readOnly;
   final FormFieldSetter<PhoneNumber>? onSaved;
 
+  /// Triggers error message if field is empty
+  final bool isRequiredField;
+
+  /// Triggers error message for required field
+  final String? requiredFieldErrorMessage;
+
   /// {@macro flutter.widgets.editableText.onChanged}
   ///
   /// See also:
@@ -245,6 +251,8 @@ class IntlPhoneField extends StatefulWidget {
 
   const IntlPhoneField({
     Key? key,
+    this.requiredFieldErrorMessage,
+    this.isRequiredField = true,
     this.initialCountryCode,
     this.languageCode = 'en',
     this.disableAutoFillHints = false,
@@ -417,7 +425,9 @@ class _IntlPhoneFieldState extends State<IntlPhoneField> {
         widget.onChanged?.call(phoneNumber);
       },
       validator: (value) {
-        if (value == null || !isNumeric(value)) return validatorMessage;
+        if (value == null || value.isEmpty) return widget.requiredFieldErrorMessage ?? 'This is required field';
+
+        if (!isNumeric(value)) return validatorMessage;
         if (!widget.disableLengthCheck) {
           return value.length >= _selectedCountry.minLength && value.length <= _selectedCountry.maxLength
               ? null
