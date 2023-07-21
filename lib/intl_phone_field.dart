@@ -425,13 +425,15 @@ class _IntlPhoneFieldState extends State<IntlPhoneField> {
         widget.onChanged?.call(phoneNumber);
       },
       validator: (value) {
-        if (value == null || value.isEmpty) return widget.requiredFieldErrorMessage ?? 'This is required field';
+        if (widget.isRequiredField) {
+          if (value == null || value.isEmpty) return widget.requiredFieldErrorMessage ?? 'This is required field';
 
-        if (!isNumeric(value)) return validatorMessage;
-        if (!widget.disableLengthCheck) {
-          return value.length >= _selectedCountry.minLength && value.length <= _selectedCountry.maxLength
-              ? null
-              : widget.invalidNumberMessage;
+          if (!isNumeric(value)) return validatorMessage;
+          if (!widget.disableLengthCheck) {
+            return value.length >= _selectedCountry.minLength && value.length <= _selectedCountry.maxLength
+                ? null
+                : widget.invalidNumberMessage;
+          }
         }
 
         return validatorMessage;
