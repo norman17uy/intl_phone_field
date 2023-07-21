@@ -427,13 +427,12 @@ class _IntlPhoneFieldState extends State<IntlPhoneField> {
       validator: (value) {
         if (widget.isRequiredField) {
           if (value == null || value.isEmpty) return widget.requiredFieldErrorMessage ?? 'This is required field';
-
-          if (!isNumeric(value)) return validatorMessage;
-          if (!widget.disableLengthCheck) {
-            return value.length >= _selectedCountry.minLength && value.length <= _selectedCountry.maxLength
-                ? null
-                : widget.invalidNumberMessage;
-          }
+        }
+        if (value == null || !isNumeric(value)) return validatorMessage;
+        if (!widget.disableLengthCheck) {
+          return value.length >= _selectedCountry.minLength && value.length <= _selectedCountry.maxLength
+              ? null
+              : widget.invalidNumberMessage;
         }
 
         return validatorMessage;
